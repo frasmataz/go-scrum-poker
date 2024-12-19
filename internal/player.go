@@ -1,4 +1,4 @@
-package main
+package scrum_poker
 
 import (
 	"github.com/google/uuid"

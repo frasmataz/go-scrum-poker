@@ -2,29 +2,17 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
-	"strings"
-	"time"
 
-	"github.com/benc-uk/go-rest-api/pkg/sse"
+	"github.com/aohorodnyk/mimeheader"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/frasmataz/go-scrum-poker/config"
+	scrum_poker "github.com/frasmataz/go-scrum-poker/internal"
 	"github.com/frasmataz/go-scrum-poker/internal/util"
 )
-
-type Message struct {
-	ID   int       `json:"id"`
-	Text string    `json:"text"`
-	Time time.Time `json:"time"`
-}
-
-var messages = []Message{
-	{ID: 1, Text: "Welcome to the GO + HTMX chat!", Time: time.Now()},
-}
 
 var htmlRenderer = util.NewHTMLRenderer("templates")
 
@@ -34,58 +22,57 @@ func main() {
 		panic(err)
 	}
 
-	broker := sse.NewBroker[Message]()
-	broker.MessageAdapter = sseHandler
+	// broker := sse.NewBroker[Message]()
+	// broker.MessageAdapter = sseHandler
 
 	e := echo.New()
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Renderer = htmlRenderer
+	e.Static("/static", "./static")
+
+	gameController := scrum_poker.GameController{}
 
 	e.GET("/", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "index.html", nil)
-	})
+		acceptHeader := mimeheader.ParseAcceptHeader(c.Request().Header.Get("Accept"))
 
-	e.POST("/add", func(c echo.Context) error {
-		text := c.FormValue("text")
-		newMessage := Message{
-			ID:   len(messages) + 1,
-			Text: text,
-			Time: time.Now(),
+		if acceptHeader.Match("text/html") {
+			return c.Render(http.StatusOK, "index.html", nil)
+		} else if acceptHeader.Match("application/json") {
+			return c.JSON(http.StatusOK, nil)
 		}
-		messages = append(messages, newMessage)
-		broker.SendToGroup("*", newMessage)
 
-		return c.Render(http.StatusOK, "message.html", newMessage)
+		return echo.NewHTTPError(http.StatusNotAcceptable, "Expected 'text/html' or 'application/json'")
 	})
 
-	e.GET("/messages", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "messages.html", map[string]any{"messages": messages})
+	e.GET("/game", func(c echo.Context) error {
+		acceptHeader := mimeheader.ParseAcceptHeader(c.Request().Header.Get("Accept"))
+
+		if acceptHeader.Match("text/html") {
+			return c.Render(http.StatusOK, "game.html", gameController.Games)
+		} else if acceptHeader.Match("application/json") {
+			return c.JSON(http.StatusOK, gameController.Games)
+		}
+
+		return nil
 	})
 
-	e.GET("/events", func(c echo.Context) error {
-		log.Printf("SSE client connected, ip: %v", c.RealIP())
-
-		return broker.Stream(time.Now().String(), c.Response().Writer, *c.Request())
-	})
-
-	e.Static("/static", "./static")
 	e.Start(fmt.Sprintf("%v:%v", config.Host, config.Port))
 }
 
-func sseHandler(msg Message, clientID string) sse.SSE {
-	log.Printf("MESSAGE: %v", msg)
-	sse := sse.SSE{
-		Event: "message",
-		Data:  "",
-	}
+// func sseHandler(msg Message, clientID string) sse.SSE {
+// 	log.Printf("MESSAGE: %v", msg)
+// 	sse := sse.SSE{
+// 		Event: "message",
+// 		Data:  "",
+// 	}
 
-	msgHTML, _ := htmlRenderer.RenderToString("message.html", msg)
-	log.Printf("HTML: %v", msgHTML)
+// 	msgHTML, _ := htmlRenderer.RenderToString("message.html", msg)
+// 	log.Printf("HTML: %v", msgHTML)
 
-	// Write the HTML response, but we need to strip out newlines from the template for SSE
-	sse.Data = strings.Replace(msgHTML, "\n", "", -1)
+// 	// Write the HTML response, but we need to strip out newlines from the template for SSE
+// 	sse.Data = strings.Replace(msgHTML, "\n", "", -1)
 
-	return sse
-}
+// 	return sse
+// }

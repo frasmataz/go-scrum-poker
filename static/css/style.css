@@ -1,0 +1,130 @@
+@import url('https://unpkg.com/@catppuccin/palette/css/catppuccin.css');
+
+/* https://catppuccin.github.io/elixir/Catppuccin.Color.html */
+:root {
+  --main-bg-color: var(--ctp-mocha-base);
+  --main-text-color: var(--ctp-mocha-text);
+
+  --title-text-color: var(--ctp-mocha-mauve);
+
+  --messagebox-background-color: var(--ctp-mocha-mantle);
+  --messagebox-border-color: var(--ctp-mocha-crust);
+  --messagebox-text-color: var(--ctp-mocha-text);
+
+  --message-bg-color: var(--ctp-latte-lavender);
+  --message-border-color: var(--ctp-mocha-text);
+  --message-text-color: var(--ctp-mocha-text);
+
+  --textinput-bg-color: var(--ctp-mocha-mantle);
+  --textinput-border-color: var(--ctp-latte-lavender);
+  --textinput-text-color: var(--ctp-mocha-text);
+
+  --submit-button-bg-color: var(--ctp-mocha-mauve);
+  --submit-button-border-color: var(--ctp-mocha-base);
+  --submit-button-text-color: var(--ctp-mocha-base);
+
+  --font-family: 'Narita Monospace', monospace;
+}
+
+html {
+  font-family: var(--font-family);
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+body {
+  color: var(--main-text-color);
+  background-color: var(--main-bg-color);
+}
+
+#title {
+  color: var(--title-text-color);
+  margin: 5vh auto;
+  font-weight: 900;
+  font-size: 5dvh;
+}
+
+#container {
+  width: 60vw;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  background-color: var(--message-bg-color);
+  color: var(--message-text-color);
+
+  border: 1px solid;
+  border-radius: 5px;
+  border-color: var(--message-border-color);
+  
+  margin: 10px 0px;
+  padding: 10px;
+  align-items: flex-end;
+  
+  word-wrap: break-word;
+}
+.message-time {
+  font-size: xx-small;
+}
+
+#messagebox-scroll {
+  background-color: var(--messagebox-background-color);
+  color: var(--messagebox-text-color);
+
+  border: 2px solid;
+  border-radius: 5px;
+  border-color: var(--messagebox-border-color);
+  
+  margin: 0px 0px;
+  padding: 10px;
+
+  height: 60svh;
+  min-height: 100px;
+
+  overflow: scroll;
+  position: relative;
+
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+#messagebox-flex {
+  justify-content: flex-end;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+input[type=text] {
+  font-family: var(--font-family);
+  font-size: large;
+  color: var(--ctp-mocha-text);
+  background-color: var(--textinput-bg-color);
+  border-color: var(--textinput-border-color);
+
+  border-radius: 5px;
+  padding: 10px;
+
+  flex-grow: 1;
+  min-width: 0px;
+}
+
+input[type=submit] {
+  font-family: var(--font-family);
+  color: var(--submit-button-text-color);
+  background-color: var(--submit-button-bg-color);
+  border-color: var(--submit-button-border-color);
+
+  border-radius: 5px;
+  padding: 10px;
+
+  float: right;
+}
+
+#input-container {
+  display: flex;
+  width: 100%;
+}

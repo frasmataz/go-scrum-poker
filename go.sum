@@ -1,3 +1,5 @@
+github.com/aohorodnyk/mimeheader v0.0.6 h1:WCV4NQjtbqnd2N3FT5MEPesan/lfvaLYmt5v4xSaX/M=
+github.com/aohorodnyk/mimeheader v0.0.6/go.mod h1:/Gd3t3vszyZYwjNJo2qDxoftZjjVzMdkQZxkiINp3vM=
 github.com/benc-uk/go-rest-api v1.0.11 h1:QoppTqm5YHomOgjFVurFbvEL8Jg0laVYuRUokJiQ5bY=
 github.com/benc-uk/go-rest-api v1.0.11/go.mod h1:h5i/C32EskY8aD0EXVR4bGQbuq3zfD68k2SCVKpgM1Y=
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=

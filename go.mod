@@ -3,6 +3,7 @@ module github.com/frasmataz/go-scrum-poker
 go 1.23.1
 
 require (
+	github.com/aohorodnyk/mimeheader v0.0.6
 	github.com/benc-uk/go-rest-api v1.0.11
 	github.com/google/uuid v1.6.0
 	github.com/labstack/echo/v4 v4.13.2
